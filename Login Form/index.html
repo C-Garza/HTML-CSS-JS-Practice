@@ -9,14 +9,16 @@
   <body>
     <section id="container">
       <form class="login-form" name="login-form">
-        <div class="login-section-username">
-          <label class="login-username-label" for="login-username">Username: </label>
-          <input class="login-username-input" id="login-username" name="login-username" type="text" />
-        </div>
-        <div class="login-section-password">
-          <label class="login-password-label" for="login-password">Password: </label>
-          <a href="#" class="login-password-forgot">Forgot your password?</a>
-          <input class="login-password-input" id="login-password" name="login-password" type="password" />
+        <div class="login-form-container">
+          <div class="login-section-username">
+            <label class="login-username-label" for="login-username">Username: </label>
+            <input class="login-username-input" id="login-username" name="login-username" type="text" />
+          </div>
+          <div class="login-section-password">
+            <label class="login-password-label" for="login-password">Password: </label>
+            <a href="#" class="login-password-forgot">Forgot your password?</a>
+            <input class="login-password-input" id="login-password" name="login-password" type="password" />
+          </div>
         </div>
         <div class="login-section-lower">
           <div class="login-section-stay-logged">
@@ -24,7 +26,7 @@
             <label class="login-stay-logged-label" for="login-stay-logged">Keep me logged in</label>
           </div>
           <div class="login-section-submit">
-            <button type="submit" name="login">Login</button>
+            <button class="login-submit" type="submit" name="login"><span>Login</span></button>
           </div>
         </div>
       </form>
