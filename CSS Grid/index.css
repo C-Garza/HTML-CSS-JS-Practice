@@ -1,0 +1,36 @@
+html {
+  height: 100%;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+*, *:after, *:before {
+  box-sizing: inherit;
+}
+/*****CONTAINER*****/
+.container {
+  width: 100%;
+}
+/*****DEMO GRID******/
+.twelve-col-grid:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.twelve-col-grid .grid-item {
+  width: calc((100% - 20px * 12) / 12);
+  height: 100vh;
+  padding: 5px;
+  margin-right: 10px;
+  margin-left: 10px;
+  float: left;
+  background-color: #E1F5FE;
+}
+.hidden {
+  display: none;
+}
+/*****GRID LAYOUT*****/
