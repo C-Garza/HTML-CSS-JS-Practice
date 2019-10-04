@@ -60,6 +60,13 @@ ul {
   margin-top: 10px;
   background-color: #90CAF9;
 }
+/*****FOOTER*****/
+.l-footer {
+  width: calc(100% - 20px);
+  height: 100px;
+  margin-top: 10px;
+  background-color: #D1C4E9;
+}
 /*****DEMO GRID******/
 .twelve-col-grid:after {
   content: "";
