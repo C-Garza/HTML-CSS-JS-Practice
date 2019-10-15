@@ -130,6 +130,71 @@ a {
   font-weight: 500;
   font-size: 3.8em;
 }
+/*****CAROUSEL CONTAINER*****/
 .carousel-container {
   flex: 1;
+}
+/*****ITEM COLLECTIONS*****/
+.item-collections-container {
+  display: flex;
+  margin-top: 150px;
+}
+.item-collections-container > div {
+  flex: 1;
+}
+.item-collections-container .item-collection-headline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+.item-collection-headline img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left;
+}
+.item-collection-headline:nth-child(5) img {
+  object-position: right;
+}
+.item-collection-headline .bg-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.2);
+}
+.item-collection-headline h2 {
+  position: absolute;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 1.1em;
+  color: white;
+}
+.item-collections-container .item-collection-info__first {
+  background-color: #F8440C;
+}
+.item-collections-container .item-collection-info__second {
+  background-color: #FFC400;
+}
+.item-collections-container .item-collection-info {
+  font-family: "Roboto";
+  color: white;
+}
+.item-collections-container .item-collection-info h2 {
+  margin: 0;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  padding: 0 30px;
+  font-weight: bold;
+  font-size: 1em;
+}
+.item-collections-container .item-collection-info p {
+  margin-bottom: 40px;
+  padding: 0 30px;
+  line-height: 1.5;
+  font-size: 0.9em;
 }
