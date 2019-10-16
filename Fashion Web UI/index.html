@@ -3,9 +3,10 @@
   <title>Fashion Web UI</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Poppins:500|Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=PT+Serif|Playfair+Display|Poppins:500|Roboto:300,400,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
   <link rel="stylesheet" href="index.css" type="text/css">
+  <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
   <div class="container">
@@ -25,7 +26,7 @@
       </nav>
     </header>
     <main class="landing-page">
-      <div class="row">
+      <div class="row row-one">
         <section class="social-links">
           <ul class="social-links-list">
             <li class="social-link-item"><a href="#"><i class="fab fa-facebook"></i></a></li>
@@ -39,21 +40,21 @@
           <p class="headline-info">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </section>
         <section class="carousel-container">
-          <div class="carousel-counter"><span class="carousel-counter-current">01</span>/05</div>
           <div class="carousel">
+            <div class="carousel-counter"><span class="carousel-counter-current">01</span><span class="carousel-counter-current__slash">/</span>05</div>
             <div class="carousel-slide show"></div>
-            <div class="carousel-slide show"></div>
-            <div class="carousel-slide show"></div>
-            <div class="carousel-slide show"></div>
-            <div class="carousel-slide show"></div>
+            <div class="carousel-slide"></div>
+            <div class="carousel-slide"></div>
+            <div class="carousel-slide"></div>
+            <div class="carousel-slide"></div>
           </div>
           <div class="carousel-controls">
-            <button class="carousel-button carousel-button-prev">&lt</button>
-            <button class="carousel-button carousel-button-next">&gt</button>
+            <button class="carousel-button carousel-button-prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-button carousel-button-next"><i class="fas fa-chevron-right"></i></button>
           </div>
         </section>
       </div>
-      <div class="row">
+      <div class="row row-two">
         <section class="item-collections-container">
           <div class="item-collection-headline">
             <img src="https://source.unsplash.com/AhfrA5VQNpM/2500x2000" alt="Classic Collection">
@@ -70,7 +71,7 @@
             <h2>WESTERN COLLECTION</h2>
           </div>
           <div class="item-collection-info item-collection-info__second">
-            <h2>SUMMER FRIENDLY FABRIC</h2>
+            <h2>SUMMER FRIENDLY FABRICS</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
           </div>
           <div class="item-collection-headline">

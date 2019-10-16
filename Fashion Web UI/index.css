@@ -17,9 +17,18 @@ ul {
 a {
   text-decoration: none;
 }
+button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  text-transform: none;
+}
 /*****CONTAINER*****/
 .container {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: auto;
   background-color: #FAF6F3;
 }
@@ -27,9 +36,6 @@ a {
   display: flex;
 }
 /*****HEADER*****/
-.header {
-  
-}
 .header-nav {
   padding-top: 10px;
   text-align: center;
@@ -42,6 +48,7 @@ a {
 .header-nav .menu {
   flex: 2.5;
   justify-content: center;
+  font-family: "Playfair Display";
 }
 .header-nav .menu-item {
   margin: 2px 10px;
@@ -57,10 +64,16 @@ a {
   position: relative;
   flex: 1;
 }
+.header-nav .menu-shop-item {
+  margin-left: 25px;
+  cursor: pointer;
+}
+.header-nav .menu-shop-item:hover {
+  color: #FFAB91;
+}
 .header-nav .menu-shop-item > i {
   position: relative;
   font-size: 1.6em;
-  margin-left: 25px;
 }
 .header-nav .menu-shop-item:nth-child(2):before {
   content: "";
@@ -71,6 +84,7 @@ a {
   left: 6.2em;
   top: 0em;
   background-color: #DBD9D8;
+  pointer-events: none;
 }
 .header-nav .menu-shop-item__amount {
   position: absolute;
@@ -85,12 +99,11 @@ a {
   color: white;
 }
 /*****MAIN*****/
-.landing-page .row {
-  
+.landing-page .row-one {
+  margin-top: 50px;
 }
 /*****SOCIAL LINKS*****/
 .social-links {
-  margin-top: 50px;
   flex: 0.2;
 }
 .social-links-list {
@@ -105,6 +118,10 @@ a {
 }
 .social-links-list .social-link-item i {
   font-size: 1.8em;
+  transition: all 0.05s;
+}
+.social-links-list .social-link-item i:hover {
+  transform: scale(1.2);
 }
 .fa-facebook {
   color: #3B5998;
@@ -123,8 +140,8 @@ a {
   flex: 0.6;
 }
 .headline {
-  margin-top: 50px;
-  margin-bottom: 0;
+  margin-top: 30px;
+  margin-bottom: 30px;
   color: black;
   font-family: "Playfair Display";
   font-weight: 500;
@@ -133,11 +150,95 @@ a {
 /*****CAROUSEL CONTAINER*****/
 .carousel-container {
   flex: 1;
+  font-family: "PT Serif";
+}
+.carousel-container .carousel-counter {
+  position: relative;
+  align-self: center;
+  color: #D5D0D0;
+  font-size: 1.6em;
+  transform: rotate(-90deg);
+}
+.carousel-container .carousel-counter-current {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  font-size: 2.5rem;
+  color: #FDC401;
+}
+.carousel-container .carousel-counter-current__slash {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  font-size: 2.5rem;
+}
+.carousel-container .carousel {
+  display: flex;
+  position: relative;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.carousel-slide-border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border: 3px solid #D5D0D0;
+  transition: all 0.45s;
+  transform: translate(25px, 25px);
+}
+.carousel-slide-border.animate-border {
+  transform: none;
+}
+.carousel-container .carousel-slide {
+  flex: 1 0 40%;
+  margin: 25px;
+}
+.carousel-container .carousel-slide.show {
+  flex: 1 0 60%;
+  position: relative;
+  margin-left: 10px;
+  z-index: 0;
+  transition: transform 0.45s;
+}
+.carousel-container .carousel-slide.show.animate-slide {
+  transform: translate(25px, 25px);
+}
+.carousel-container .carousel-slide img {
+  width: 100%;
+}
+.carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 35px;
+}
+.carousel-controls .carousel-button {
+  margin-right: 15px;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #D5D0D0;
+  color: #D5D0D0;
+  font-size: 1em;
+  line-height: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.carousel-controls .carousel-button:hover {
+  background-color: #F7440C;
+  border-color: #F7440C;
+  color: white;
+}
+.carousel-controls .carousel-button-next {
+  margin-right: 50px;
 }
 /*****ITEM COLLECTIONS*****/
+.landing-page .row-two {
+  margin-top: 50px;
+}
 .item-collections-container {
   display: flex;
-  margin-top: 150px;
 }
 .item-collections-container > div {
   flex: 1;
@@ -189,12 +290,12 @@ a {
   margin-top: 40px;
   margin-bottom: 20px;
   padding: 0 30px;
-  font-weight: bold;
-  font-size: 1em;
+  font-weight: 500;
+  font-size: 0.9em;
 }
 .item-collections-container .item-collection-info p {
   margin-bottom: 40px;
   padding: 0 30px;
   line-height: 1.5;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
