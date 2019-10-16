@@ -1,6 +1,7 @@
 window.onload = function() {
   let carouselControls = document.querySelector(".carousel-controls");
   let carouselSlides = document.querySelectorAll(".carousel-slide");
+  let navBar = document.querySelector(".header-nav");
   let carouselImages = [
     "https://source.unsplash.com/-XGhtJXY-yY/2500x2000", 
     "https://source.unsplash.com/xvE9q-Z7U_o/2500x2000",
@@ -52,6 +53,12 @@ window.onload = function() {
     document.querySelector(".carousel-counter-current").textContent = "0" + whichSlide;
     isChangingSlide = false;
   }
+  navBar.addEventListener("click", function(e) {
+    let menuButton = e.target.closest(".menu__mobile");
+    if(menuButton) {
+      document.querySelector(".header-nav .menu").classList.toggle("menu__open");
+    }
+  });
   carouselControls.addEventListener("click", function(e) {
     let carouselButton = e.target.closest(".carousel-button");
     if(carouselButton && !isChangingSlide) {
