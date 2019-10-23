@@ -4,12 +4,17 @@ window.onload = function() {
   window.mozRequestAnimationFrame ||
   function(callback) {window.setTimeout(callback, 1000/60)};
   let keysDown = [];
+  let playerOneKeysDown = [];
+  let playerTwoKeysDown = [];
   let isKeyDown = false;
+  let isPlayerOneKeyDown = false;
+  let isPlayerTwoKeyDown = false;
   ////GAME VARIABLES
   let BALL_SPEED_X = -6;
   let BALL_SPEED_Y = 0;
   let BALL_DEACCELERATION = 1;
   let PADDLE_SPEED_Y = 10;
+  let IS_COMP = false;
   let COMP_PADDLE_SPEED_Y = 5;
   let COMP_PADDLE_SPEED_Y_MULTIPLYER = 1.6;
   let COMP_CHALLENGE = false;
@@ -105,6 +110,7 @@ window.onload = function() {
 
       if(!this.isRunning) {
         this.context.fillText("Press arrow key to begin", this.canvas.width / 2, this.canvas.height / 2);
+        this.context.fillText("or press W/S for 2P", this.canvas.width / 2, this.canvas.height / 1.6);
       }
       this.context.fillText(this.playerOne.score, this.canvas.width / 3.5, this.canvas.height / 5);
       this.context.fillText(this.playerTwo.score, this.canvas.width / 1.4, this.canvas.height / 5);
@@ -173,19 +179,25 @@ window.onload = function() {
         this.ball.x_speed = BALL_SPEED_X >= 0 ? -BALL_SPEED_X : BALL_SPEED_X;
       }
       ////PLAYER ONE MOVEMENT
-      if(isKeyDown) {
+      if(isKeyDown || isPlayerOneKeyDown) {
         this.playerOne.y -= this.playerOne.y_speed;
       }
+      ////PLAYER TWO MOVEMENT
+      if(isKeyDown || isPlayerTwoKeyDown) {
+        this.playerTwo.y -= this.playerTwo.y_speed;
+      }
       ////COMPUTER AI MOVEMENT
-      if((this.playerTwo.y + this.playerTwo.height / 2) < (this.ball.y + this.ball.height / 2)) {
-        this.playerTwo.y += COMP_PADDLE_SPEED_Y;
-      }
-      if((this.playerTwo.y + this.playerTwo.height / 2) > (this.ball.y + this.ball.height / 2)) {
-        this.playerTwo.y -= COMP_PADDLE_SPEED_Y;
-      }
-      if(FINAL_SCORE / 2 <= this.playerOne.score && !COMP_CHALLENGE) {
-        COMP_CHALLENGE = true;
-        COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+      if(IS_COMP) {
+        if((this.playerTwo.y + this.playerTwo.height / 2) < (this.ball.y + this.ball.height / 2)) {
+          this.playerTwo.y += COMP_PADDLE_SPEED_Y;
+        }
+        if((this.playerTwo.y + this.playerTwo.height / 2) > (this.ball.y + this.ball.height / 2)) {
+          this.playerTwo.y -= COMP_PADDLE_SPEED_Y;
+        }
+        if(FINAL_SCORE / 2 <= this.playerOne.score && !COMP_CHALLENGE) {
+          COMP_CHALLENGE = true;
+          COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+        }
       }
       ////PLAYER ONE COLLISION WITH TOP WALL
       if(this.playerOne.y <= 0) {
@@ -245,32 +257,81 @@ window.onload = function() {
     }
     ////START GAME WITH ARROW KEYS OR WASD
     if((e.keyCode === 87 || e.keyCode === 38 || e.keyCode === 83 || e.keyCode === 40) && !Game.isRunning) {
+      if(e.keyCode === 38 || e.keyCode === 40) {
+        IS_COMP = true;
+      }
+      else {
+        IS_COMP = false;
+      }
       Game.isRunning = true;
       animate(Game.loop);
     }
     ////HANDLE UP ARROW AND W KEY
     if(e.keyCode === 87 || e.keyCode === 38) {
-      ////PREVENT HELD KEYDOWN SPAM
-      if(keysDown.length && (keysDown[keysDown.length - 1].key === e.keyCode)) {
-        return;
+      ////PLAYER ONE VS COMP
+      if(IS_COMP) {
+        ////PREVENT HELD KEYDOWN SPAM
+        if(keysDown.length && (keysDown[keysDown.length - 1].key === e.keyCode)) {
+          return;
+        }
+        keysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? PADDLE_SPEED_Y : -PADDLE_SPEED_Y});
+        isKeyDown = true;
+        Game.playerOne.y_speed = keysDown[keysDown.length - 1].speed;
       }
-      keysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? PADDLE_SPEED_Y : -PADDLE_SPEED_Y});
-      isKeyDown = true;
-      Game.playerOne.y_speed = keysDown[keysDown.length - 1].speed;
+      ////PLAYER ONE W KEY
+      else if(e.keyCode === 87) {
+        if(playerOneKeysDown.length && (playerOneKeysDown[playerOneKeysDown.length - 1].key === e.keyCode)) {
+          return;
+        }
+        playerOneKeysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? PADDLE_SPEED_Y : -PADDLE_SPEED_Y});
+        isPlayerOneKeyDown = true;
+        Game.playerOne.y_speed = playerOneKeysDown[playerOneKeysDown.length - 1].speed;
+      }
+      ////PLAYER TWO UP ARROW KEY
+      else if(e.keyCode === 38) {
+        if(playerTwoKeysDown.length && (playerTwoKeysDown[playerTwoKeysDown.length - 1].key === e.keyCode)) {
+          return;
+        }
+        playerTwoKeysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? PADDLE_SPEED_Y : -PADDLE_SPEED_Y});
+        isPlayerTwoKeyDown = true;
+        Game.playerTwo.y_speed = playerTwoKeysDown[playerTwoKeysDown.length - 1].speed;
+      }
     }
     ////HANDLE DOWN ARROW AND S KEY
     if(e.keyCode === 83 || e.keyCode === 40) {
-      ////PREVENT HELD KEYDOWN SPAM
-      if(keysDown.length && (keysDown[keysDown.length - 1].key === e.keyCode)) {
-        return;
+      ////PLAYER VS COMP
+      if(IS_COMP) {
+        ////PREVENT HELD KEYDOWN SPAM
+        if(keysDown.length && (keysDown[keysDown.length - 1].key === e.keyCode)) {
+          return;
+        }
+        keysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? -PADDLE_SPEED_Y : PADDLE_SPEED_Y});
+        isKeyDown = true;
+        Game.playerOne.y_speed = keysDown[keysDown.length - 1].speed;
       }
-      keysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? -PADDLE_SPEED_Y : PADDLE_SPEED_Y});
-      isKeyDown = true;
-      Game.playerOne.y_speed = keysDown[keysDown.length - 1].speed;
+      ////PLAYER ONE S KEY
+      else if(e.keyCode === 83) {
+        if(playerOneKeysDown.length && (playerOneKeysDown[playerOneKeysDown.length - 1].key === e.keyCode)) {
+          return;
+        }
+        playerOneKeysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? -PADDLE_SPEED_Y : PADDLE_SPEED_Y});
+        isPlayerOneKeyDown = true;
+        Game.playerOne.y_speed = playerOneKeysDown[playerOneKeysDown.length - 1].speed;
+      }
+      ////PLAYER TWO DOWN ARROW KEY
+      else if(e.keyCode === 40) {
+        if(playerTwoKeysDown.length && (playerTwoKeysDown[playerTwoKeysDown.length - 1].key === e.keyCode)) {
+          return;
+        }
+        playerTwoKeysDown.push({key: e.keyCode, speed: PADDLE_SPEED_Y >= 0 ? -PADDLE_SPEED_Y : PADDLE_SPEED_Y});
+        isPlayerTwoKeyDown = true;
+        Game.playerTwo.y_speed = playerTwoKeysDown[playerTwoKeysDown.length - 1].speed;
+      }
     }
   });
   ////LISTEN FOR LET GO PLAYER CONTROLS
   window.addEventListener("keyup", function(e) {
+    ////PLAYER VS COMP
     if(keysDown.length && (e.keyCode === 87 || e.keyCode === 38 || e.keyCode === 83 || e.keyCode === 40)) {
       keysDown = keysDown.filter(key => {
         return key.key !== e.keyCode;
@@ -283,6 +344,36 @@ window.onload = function() {
       ////MAKE PADDLE PHYSICS MORE REALISTIC BY NOT HAVING Y MOMENTUM WHEN STAYING STILL
       if(REALISTIC_PADDLE) {
         Game.playerOne.y_speed = 0;
+      }
+    }
+    ////PLAYER ONE
+    if(playerOneKeysDown && (e.keyCode === 87 || e.keyCode === 83)) {
+      playerOneKeysDown = playerOneKeysDown.filter(key => {
+        return key.key !== e.keyCode;
+      });
+      if(playerOneKeysDown.length) {
+        Game.playerOne.y_speed = playerOneKeysDown[playerOneKeysDown.length - 1].speed;
+        return;
+      }
+      isPlayerOneKeyDown = false;
+      ////MAKE PADDLE PHYSICS MORE REALISTIC BY NOT HAVING Y MOMENTUM WHEN STAYING STILL
+      if(REALISTIC_PADDLE) {
+        Game.playerOne.y_speed = 0;
+      }
+    }
+    ////PLAYER TWO
+    if(playerTwoKeysDown && (e.keyCode === 38 || e.keyCode === 40)) {
+      playerTwoKeysDown = playerTwoKeysDown.filter(key => {
+        return key.key !== e.keyCode;
+      });
+      if(playerTwoKeysDown.length) {
+        Game.playerTwo.y_speed = playerTwoKeysDown[playerTwoKeysDown.length - 1].speed;
+        return;
+      }
+      isPlayerTwoKeyDown = false;
+      ////MAKE PADDLE PHYSICS MORE REALISTIC BY NOT HAVING Y MOMENTUM WHEN STAYING STILL
+      if(REALISTIC_PADDLE) {
+        Game.playerTwo.y_speed = 0;
       }
     }
   });
