@@ -11,3 +11,147 @@ body {
 *, *:after, *:before {
   box-sizing: inherit;
 }
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: white;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: white;
+  opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: white;
+  opacity:  1;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: white;
+}
+::placeholder {
+  color: white;
+}
+/*****CANVAS*****/
+#canvas-wrap {
+  position: relative;
+  width: 600px;
+  height: 500px;
+}
+.game-menu {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  text-align: center;
+  color: white;
+  font-family: "Comfortaa";
+}
+/*****GAME OPTIONS*****/
+.game-menu-options:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.game-menu-options-item {
+  width: 50%;
+  float: left;
+}
+.game-menu-options-item:hover .game-menu-options-label {
+  color: #FF5252;
+}
+.game-menu-options-item-box {
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  width: 35px;
+  height: 35px;
+  margin: 0;
+  margin-left: 10px;
+  padding: 0;
+  border: 2px solid #FF5252;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.game-menu-options-item-box___active:after {
+  content: "";
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  width: 35px;
+  height: 20px;
+  border: 5px solid white;
+  border-top: none;
+  border-right: none;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.game-menu-options-label {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 8px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.game-menu-options-score-label {
+  cursor: default;
+}
+.game-menu-options-score-label:hover {
+  color: white;
+}
+#game-menu-options-score {
+  width: 50px;
+  border: none;
+}
+#game-menu-options-score input {
+  width: 60px;
+  height: 100%;
+  padding: 5px 5px 2px 5px;
+  background-color: black;
+  color: white;
+  font-family: "Comfortaa";
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10px;
+}
+/*****ADVANCED GAME OPTIONS*****/
+.game-menu-advanced-options:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.game-menu-advanced-options-item {
+  width: 50%;
+  float: left;
+}
+.game-menu-advanced-options-item:hover .game-menu-advanced-options-label {
+  color: #FF5252;
+}
+.game-menu-advanced-options-label {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 8px;
+  font-size: 1.2em;
+}
+.game-menu-advanced-options-item-box {
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  width: 50px;
+  height: 35px;
+  margin: 0;
+  margin-left: 10px;
+  padding: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.game-menu-advanced-options-item-box input {
+  width: 60px;
+  height: 100%;
+  padding: 5px 5px 2px 5px;
+  background-color: black;
+  color: white;
+  font-family: "Comfortaa";
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10px;
+}
+.hidden {
+  display: none;
+}

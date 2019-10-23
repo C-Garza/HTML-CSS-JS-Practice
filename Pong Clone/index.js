@@ -9,6 +9,7 @@ window.onload = function() {
   let isKeyDown = false;
   let isPlayerOneKeyDown = false;
   let isPlayerTwoKeyDown = false;
+  let isMenuOpen = false;
   ////GAME VARIABLES
   let BALL_SPEED_X = -6;
   let BALL_SPEED_Y = 0;
@@ -18,6 +19,7 @@ window.onload = function() {
   let COMP_PADDLE_SPEED_Y = 5;
   let COMP_PADDLE_SPEED_Y_MULTIPLYER = 1.6;
   let COMP_CHALLENGE = false;
+  let COMP_CHALLENGE_ENABLED = true;
   let REALISTIC_PADDLE = false;
   let FINAL_SCORE = 5;
   let GAME_FINISH = false;
@@ -56,7 +58,7 @@ window.onload = function() {
   let Game = {
     ////INSTANTIATE OBJECTS AND BOARD
     init: function init() {
-      this.canvas = document.getElementById("gameBoard");
+      this.canvas = document.getElementById("game-board");
       this.context = this.canvas.getContext("2d");
 
       this.canvas.width = 600;
@@ -105,17 +107,21 @@ window.onload = function() {
     },
     ////RENDER MAIN AND SCORE MENU
     menu: function menu() {
-      this.context.font = "2em Arial";
+      // this.context.font = "2em Arial";
+      this.context.font = "2em Lobster";
       this.context.textAlign = "center";
 
       if(!this.isRunning) {
         this.context.fillText("Press arrow key to begin", this.canvas.width / 2, this.canvas.height / 2);
         this.context.fillText("or press W/S for 2P", this.canvas.width / 2, this.canvas.height / 1.6);
+        this.context.font = "1.5em Lobster";
+        this.context.fillText("Press P for Options", this.canvas.width / 2, this.canvas.height / 1.1);
       }
+      this.context.font = "2em Comfortaa";
       this.context.fillText(this.playerOne.score, this.canvas.width / 3.5, this.canvas.height / 5);
       this.context.fillText(this.playerTwo.score, this.canvas.width / 1.4, this.canvas.height / 5);
 
-      this.context.font = "1.5em Arial";
+      this.context.font = "1.5em Comfortaa";
       this.context.fillText(FINAL_SCORE, this.canvas.width / 2, this.canvas.height / 10);
     },
     ////RENDER GAME OBJECTS
@@ -194,7 +200,7 @@ window.onload = function() {
         if((this.playerTwo.y + this.playerTwo.height / 2) > (this.ball.y + this.ball.height / 2)) {
           this.playerTwo.y -= COMP_PADDLE_SPEED_Y;
         }
-        if(FINAL_SCORE / 2 <= this.playerOne.score && !COMP_CHALLENGE) {
+        if(FINAL_SCORE / 2 <= this.playerOne.score && !COMP_CHALLENGE && COMP_CHALLENGE_ENABLED) {
           COMP_CHALLENGE = true;
           COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
         }
@@ -223,16 +229,16 @@ window.onload = function() {
         whoWon = "ONE";
       }
       if(this.playerTwo.score === FINAL_SCORE) {
-        whoWon = "TWO";
+        whoWon = "Two";
       }
       if(whoWon) {
-        this.context.font = "2em Arial";
+        this.context.font = "2.5em Lobster";
         this.context.textAlign = "center";
-        this.context.fillText("PLAYER " + whoWon + " WINS!", this.canvas.width / 2, this.canvas.height / 2);
+        this.context.fillText("Player " + whoWon + " Wins!", this.canvas.width / 2, this.canvas.height / 2);
 
-        this.context.font = "1.2em Arial";
+        this.context.font = "1.5em Lobster";
         this.context.textAlign = "center";
-        this.context.fillText("Press spacebar to play again!", this.canvas.width / 2, this.canvas.height / 1.8);
+        this.context.fillText("Press spacebar to play again!", this.canvas.width / 2, this.canvas.height / 1.5);
         if(COMP_CHALLENGE) {
           COMP_CHALLENGE = false;
           COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y / COMP_PADDLE_SPEED_Y_MULTIPLYER;
@@ -249,6 +255,21 @@ window.onload = function() {
 
   ////LISTEN FOR PLAYER CONTROLS
   window.addEventListener("keydown", function(e) {
+    ////TOGGLE PAUSE MENU
+    if(e.keyCode === 80) {
+      document.querySelector(".game-menu").classList.toggle("hidden");
+      isMenuOpen = isMenuOpen ? false : true;
+      if(isMenuOpen) {
+        Game.isRunning = false;
+      }
+      else {
+        Game.isRunning = true;
+        animate(Game.loop);
+      }
+    }
+    if(isMenuOpen) {
+      return;
+    }
     ////RESTART GAME WHEN FINISHED
     if(e.keyCode === 32 && GAME_FINISH) {
       GAME_FINISH = false;

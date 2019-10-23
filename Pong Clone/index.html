@@ -3,9 +3,74 @@
   <title>Pong Clone</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Lobster&display=swap" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="index.css">
   <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
-  <canvas id="gameBoard"></canvas>
+  <div id="canvas-wrap">
+    <canvas id="game-board"></canvas>
+    <div class="game-menu hidden">
+      <h2>Game Menu</h2>
+      <div class="game-menu-options">
+        <div class="game-menu-options-item">
+          <label class="game-menu-options-label game-menu-options-sound-label" for="game-menu-options-sound">Sound</label>
+          <div id="game-menu-options-sound" class="game-menu-options-item-box game-menu-options-item-box___active"></div>
+        </div>
+        <div class="game-menu-options-item">
+          <label class="game-menu-options-label game-menu-options-physics-label" for="game-menu-options-physics">Real Paddle Physics</label>
+          <div id="game-menu-options-physics" class="game-menu-options-item-box"></div>
+        </div>
+        <div class="game-menu-options-item">
+          <label class="game-menu-options-label game-menu-options-challenge-label" for="game-menu-options-challenge">Computer Challenge</label>
+          <div id="game-menu-options-challenge" class="game-menu-options-item-box game-menu-options-item-box___active"></div>
+        </div>
+        <div class="game-menu-options-item">
+          <label class="game-menu-options-label game-menu-options-score-label" for="game-menu-options-score">Final Score</label>
+          <div id="game-menu-options-score" class="game-menu-options-item-box">
+            <input type="number" placeholder="5" min="1">
+          </div>
+        </div>
+      </div>
+      <div class="game-menu-advanced-options">
+        <h2>Advanced Options</h2>
+        <div class="game-menu-advanced-options-item">
+          <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-ball-speed-x">Ball Speed X</label>
+          <div id="game-menu-advanced-options-ball-speed-x" class="game-menu-advanced-options-item-box">
+            <input type="number" placeholder="-6">
+          </div>
+        </div>
+        <div class="game-menu-advanced-options-item">
+          <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-paddle-speed">Paddle Speed</label>
+          <div id="game-menu-advanced-options-paddle-speed" class="game-menu-advanced-options-item-box">
+            <input type="number" placeholder="10">
+          </div>
+        </div>
+        <div class="game-menu-advanced-options-item">
+          <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-ball-speed-y">Ball Speed Y</label>
+          <div id="game-menu-advanced-options-ball-speed-y" class="game-menu-advanced-options-item-box">
+            <input type="number" placeholder="0">
+          </div>
+        </div>
+        <div class="game-menu-advanced-options-item">
+          <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-comp-paddle-speed">Comp Paddle Speed</label>
+          <div id="game-menu-advanced-options-comp-paddle-speed" class="game-menu-advanced-options-item-box">
+            <input type="number" placeholder="10">
+          </div>
+        </div>
+        <div class="game-menu-advanced-options-item">
+          <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-ball-decel">Ball Deceleration</label>
+          <div id="game-menu-advanced-options-ball-decel" class="game-menu-advanced-options-item-box">
+            <input type="number" placeholder="1">
+          </div>
+        </div>
+        <div class="game-menu-advanced-options-item">
+          <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-comp-paddle-multi">Comp Paddle Multi</label>
+          <div id="game-menu-advanced-options-comp-paddle-multi" class="game-menu-advanced-options-item-box">
+            <input type="number" placeholder="1.6">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
