@@ -22,6 +22,7 @@ window.onload = function() {
   let COMP_CHALLENGE_ENABLED = true;
   let REALISTIC_PADDLE = false;
   let FINAL_SCORE = 5;
+  let GAME_IN_PROGRESS = false;
   let GAME_FINISH = false;
   if(BALL_DEACCELERATION <= 0) {
     BALL_DEACCELERATION = 1;
@@ -224,6 +225,11 @@ window.onload = function() {
     },
     ////RENDER WIN MENU
     winMenu: function winMenu() {
+      if(GAME_FINISH) {
+        Game.isRunning = false;
+        GAME_IN_PROGRESS = false;
+        return;
+      }
       let whoWon = null;
       if(this.playerOne.score === FINAL_SCORE) {
         whoWon = "ONE";
@@ -244,6 +250,7 @@ window.onload = function() {
           COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y / COMP_PADDLE_SPEED_Y_MULTIPLYER;
         }
         Game.isRunning = false;
+        GAME_IN_PROGRESS = false;
         GAME_FINISH = true;
       }
     }
@@ -259,12 +266,14 @@ window.onload = function() {
     if(e.keyCode === 80) {
       document.querySelector(".game-menu").classList.toggle("hidden");
       isMenuOpen = isMenuOpen ? false : true;
-      if(isMenuOpen) {
-        Game.isRunning = false;
-      }
-      else {
-        Game.isRunning = true;
-        animate(Game.loop);
+      if(GAME_IN_PROGRESS) {
+        if(isMenuOpen) {
+          Game.isRunning = false;
+        }
+        else {
+          Game.isRunning = true;
+          animate(Game.loop);
+        }
       }
     }
     if(isMenuOpen) {
@@ -284,6 +293,7 @@ window.onload = function() {
       else {
         IS_COMP = false;
       }
+      GAME_IN_PROGRESS = true;
       Game.isRunning = true;
       animate(Game.loop);
     }

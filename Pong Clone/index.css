@@ -53,6 +53,7 @@ body {
 .game-menu-options-item {
   width: 50%;
   float: left;
+  cursor: pointer;
 }
 .game-menu-options-item:hover .game-menu-options-label {
   color: #FF5252;
