@@ -20,13 +20,18 @@ window.onload = function() {
   let COMP_PADDLE_SPEED_Y_MULTIPLYER = 1.6;
   let COMP_CHALLENGE = false;
   let COMP_CHALLENGE_ENABLED = true;
-  let REALISTIC_PADDLE = false;
+  let REALISTIC_PADDLE = true;
   let FINAL_SCORE = 5;
   let GAME_IN_PROGRESS = false;
   let GAME_FINISH = false;
   if(BALL_DEACCELERATION <= 0) {
     BALL_DEACCELERATION = 1;
   }
+
+  let pong_hit = new Audio("pong_hit.mp3");
+  let pong_hit_two = new Audio("pong_hit_two.mp3");
+  let pong_plop = new Audio("pong_plop.mp3");
+  let pong_point = new Audio("pong_point.mp3");
 
   ////PADDLE OBJECT
   let Paddle = {
@@ -147,6 +152,7 @@ window.onload = function() {
         else {
           this.ball.y_speed -= (this.playerOne.y_speed / 2); //
         }
+        pong_hit.play();
       }
       ////PLAYER TWO PADDLE COLLISIONS
       if((this.ball.x + this.ball.width >= this.playerTwo.x) && 
@@ -162,28 +168,33 @@ window.onload = function() {
         else {
           this.ball.y_speed -= (this.playerTwo.y_speed / 2);
         }
+        pong_hit_two.play();
       }
       ////BALL COLLISION WITH TOP WALL
       if(this.ball.y <= 0) {
         this.ball.y_speed = -(this.ball.y_speed  / BALL_DEACCELERATION);
         this.ball.y += this.ball.y_speed;
+        pong_plop.play();
       }
       ////BALL COLLISION WITH BOTTOM WALL
       if(this.ball.y + this.ball.height >= this.canvas.height) {
         this.ball.y_speed = -(this.ball.y_speed / BALL_DEACCELERATION);
         this.ball.y += this.ball.y_speed;
+        pong_plop.play();
       }
       ////HANDLE PLAYER ONE SCORE
       if(this.ball.x >= this.canvas.width) {
         this.playerOne.score += 1;
         this.ball = this.playerOne.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
         this.ball.x_speed = BALL_SPEED_X >= 0 ? BALL_SPEED_X : -BALL_SPEED_X;
+        pong_point.play();
       }
       ////HANDLE PLAYER TWO SCORE
       if(this.ball.x <= 0) {
         this.playerTwo.score += 1;
         this.ball = this.playerTwo.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
         this.ball.x_speed = BALL_SPEED_X >= 0 ? -BALL_SPEED_X : BALL_SPEED_X;
+        pong_point.play();
       }
       ////PLAYER ONE MOVEMENT
       if(isKeyDown || isPlayerOneKeyDown) {
