@@ -30,6 +30,25 @@ window.onload = function() {
   if(BALL_DEACCELERATION <= 0) {
     BALL_DEACCELERATION = 1;
   }
+
+  ////HANDLE RESET TO DEFAULT
+  let gameOptions = document.querySelector(".game-menu-options");
+  let gameOptionsAdvanced = document.querySelector(".game-menu-advanced-options");
+  let gameMenuReset = document.querySelector(".game-menu-reset");
+  let cloneOne = gameOptions.cloneNode(true);
+  let cloneTwo = gameOptionsAdvanced.cloneNode(true);
+  function resetToDefault() {
+    BALL_SPEED_X = -6;
+    BALL_SPEED_Y = 0;
+    BALL_DEACCELERATION = 1;
+    PADDLE_SPEED_Y = 10;
+    COMP_PADDLE_SPEED_Y = 5;
+    COMP_PADDLE_SPEED_Y_MULTIPLYER = 1.6;
+    HAS_SOUND = true;
+    REALISTIC_PADDLE = false;
+    COMP_CHALLENGE_ENABLED = true;
+    FINAL_SCORE = 5;
+  }
   ////GAME SOUNDS
   let pong_hit = new Audio("pong_hit.mp3");
   let pong_hit_two = new Audio("pong_hit_two.mp3");
@@ -436,8 +455,28 @@ window.onload = function() {
   });
   ////HANDLE CLICK EVENTS IN GAME MENU
   gameMenu.addEventListener("click", function(e) {
+    console.log(e.target);
     let gameOptionItem = e.target.closest(".game-menu-options-item");
     let gameOptionAdvancedItem = e.target.closest(".game-menu-advanced-options-item");
+    let resetDefault = e.target.closest(".game-menu-reset-default");
+    ////RESET TO DEFAULT MENU OPTIONS
+    if(resetDefault) {
+      resetToDefault();
+      gameMenu.removeChild(gameOptions);
+      gameMenu.removeChild(gameOptionsAdvanced);
+      gameMenu.insertBefore(cloneTwo, gameMenuReset);
+      gameOptionsAdvanced = document.querySelector(".game-menu-advanced-options");
+      gameMenu.insertBefore(cloneOne, gameOptionsAdvanced);
+      ////GRAB NEW DOM ELEMENTS
+      gameOptions = document.querySelector(".game-menu-options");
+      gameOptionsAdvanced = document.querySelector(".game-menu-advanced-options");
+      gameMenuReset = document.querySelector(".game-menu-reset");
+      cloneOne = gameOptions.cloneNode(true);
+      cloneTwo = gameOptionsAdvanced.cloneNode(true);
+      GAME_IN_PROGRESS = false;
+      GAME_FINISH = false;
+      Game.init();
+    }
     ////GAME OPTIONS
     if(gameOptionItem) {
       let gameOption = gameOptionItem.children[1];

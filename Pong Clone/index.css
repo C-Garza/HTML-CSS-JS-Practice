@@ -164,6 +164,20 @@ body {
   border: none;
   border-radius: 10px;
 }
+/*****DEFAULT AND CREDITS*****/
+.game-menu-reset {
+
+}
+.game-menu-reset h2 {
+  display: inline-block;
+  cursor: pointer;
+}
+.game-menu-reset h2:hover {
+  color: #FF5252;
+}
+.game-menu-reset h2:focus {
+  color: #FF5252;
+}
 .hidden {
   display: none;
 }
