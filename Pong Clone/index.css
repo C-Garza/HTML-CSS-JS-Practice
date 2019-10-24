@@ -54,6 +54,13 @@ body {
   width: 50%;
   float: left;
   cursor: pointer;
+  -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.game-menu-options-item:last-child {
+  cursor: default;
 }
 .game-menu-options-item:hover .game-menu-options-label {
   color: #FF5252;
@@ -71,7 +78,7 @@ body {
   border-radius: 7px;
   cursor: pointer;
 }
-.game-menu-options-item-box___active:after {
+.game-menu-options-item-box__active:after {
   content: "";
   position: absolute;
   top: 40%;
@@ -120,6 +127,10 @@ body {
 .game-menu-advanced-options-item {
   width: 50%;
   float: left;
+  -webkit-user-select: none;
+      -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 .game-menu-advanced-options-item:hover .game-menu-advanced-options-label {
   color: #FF5252;

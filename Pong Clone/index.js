@@ -3,6 +3,7 @@ window.onload = function() {
   window.webkitRequestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   function(callback) {window.setTimeout(callback, 1000/60)};
+  let gameMenu = document.querySelector(".game-menu");
   let keysDown = [];
   let playerOneKeysDown = [];
   let playerTwoKeysDown = [];
@@ -10,6 +11,7 @@ window.onload = function() {
   let isPlayerOneKeyDown = false;
   let isPlayerTwoKeyDown = false;
   let isMenuOpen = false;
+
   ////GAME VARIABLES
   let BALL_SPEED_X = -6;
   let BALL_SPEED_Y = 0;
@@ -20,14 +22,15 @@ window.onload = function() {
   let COMP_PADDLE_SPEED_Y_MULTIPLYER = 1.6;
   let COMP_CHALLENGE = false;
   let COMP_CHALLENGE_ENABLED = true;
-  let REALISTIC_PADDLE = true;
+  let REALISTIC_PADDLE = false;
   let FINAL_SCORE = 5;
   let GAME_IN_PROGRESS = false;
   let GAME_FINISH = false;
+  let HAS_SOUND = true;
   if(BALL_DEACCELERATION <= 0) {
     BALL_DEACCELERATION = 1;
   }
-
+  ////GAME SOUNDS
   let pong_hit = new Audio("pong_hit.mp3");
   let pong_hit_two = new Audio("pong_hit_two.mp3");
   let pong_plop = new Audio("pong_plop.mp3");
@@ -152,7 +155,9 @@ window.onload = function() {
         else {
           this.ball.y_speed -= (this.playerOne.y_speed / 2); //
         }
-        pong_hit.play();
+        if(HAS_SOUND) {
+          pong_hit.play();
+        }
       }
       ////PLAYER TWO PADDLE COLLISIONS
       if((this.ball.x + this.ball.width >= this.playerTwo.x) && 
@@ -168,33 +173,43 @@ window.onload = function() {
         else {
           this.ball.y_speed -= (this.playerTwo.y_speed / 2);
         }
-        pong_hit_two.play();
+        if(HAS_SOUND) {
+          pong_hit_two.play();
+        }
       }
       ////BALL COLLISION WITH TOP WALL
       if(this.ball.y <= 0) {
         this.ball.y_speed = -(this.ball.y_speed  / BALL_DEACCELERATION);
         this.ball.y += this.ball.y_speed;
-        pong_plop.play();
+        if(HAS_SOUND) {
+          pong_plop.play();
+        }
       }
       ////BALL COLLISION WITH BOTTOM WALL
       if(this.ball.y + this.ball.height >= this.canvas.height) {
         this.ball.y_speed = -(this.ball.y_speed / BALL_DEACCELERATION);
         this.ball.y += this.ball.y_speed;
-        pong_plop.play();
+        if(HAS_SOUND) {
+          pong_plop.play();
+        }
       }
       ////HANDLE PLAYER ONE SCORE
       if(this.ball.x >= this.canvas.width) {
         this.playerOne.score += 1;
         this.ball = this.playerOne.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
         this.ball.x_speed = BALL_SPEED_X >= 0 ? BALL_SPEED_X : -BALL_SPEED_X;
-        pong_point.play();
+        if(HAS_SOUND) {
+          pong_point.play();
+        }
       }
       ////HANDLE PLAYER TWO SCORE
       if(this.ball.x <= 0) {
         this.playerTwo.score += 1;
         this.ball = this.playerTwo.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
         this.ball.x_speed = BALL_SPEED_X >= 0 ? -BALL_SPEED_X : BALL_SPEED_X;
-        pong_point.play();
+        if(HAS_SOUND) {
+          pong_point.play();
+        }
       }
       ////PLAYER ONE MOVEMENT
       if(isKeyDown || isPlayerOneKeyDown) {
@@ -275,7 +290,7 @@ window.onload = function() {
   window.addEventListener("keydown", function(e) {
     ////TOGGLE PAUSE MENU
     if(e.keyCode === 80) {
-      document.querySelector(".game-menu").classList.toggle("hidden");
+      gameMenu.classList.toggle("hidden");
       isMenuOpen = isMenuOpen ? false : true;
       if(GAME_IN_PROGRESS) {
         if(isMenuOpen) {
@@ -416,6 +431,218 @@ window.onload = function() {
       ////MAKE PADDLE PHYSICS MORE REALISTIC BY NOT HAVING Y MOMENTUM WHEN STAYING STILL
       if(REALISTIC_PADDLE) {
         Game.playerTwo.y_speed = 0;
+      }
+    }
+  });
+  ////HANDLE CLICK EVENTS IN GAME MENU
+  gameMenu.addEventListener("click", function(e) {
+    let gameOptionItem = e.target.closest(".game-menu-options-item");
+    let gameOptionAdvancedItem = e.target.closest(".game-menu-advanced-options-item");
+    ////GAME OPTIONS
+    if(gameOptionItem) {
+      let gameOption = gameOptionItem.children[1];
+      let gameOptionID = gameOptionItem.children[1].id;
+      gameOptionID = gameOptionID.split("-").pop();
+      switch (gameOptionID) {
+        case "sound":
+          if(gameOption.classList.contains("game-menu-options-item-box__active")) {
+            HAS_SOUND = false;
+          }
+          else {
+            HAS_SOUND = true;
+          }
+          gameOption.classList.toggle("game-menu-options-item-box__active");
+          break;
+        case "physics":
+          if(gameOption.classList.contains("game-menu-options-item-box__active")) {
+            REALISTIC_PADDLE = false;
+          }
+          else {
+            REALISTIC_PADDLE = true;
+          }
+          gameOption.classList.toggle("game-menu-options-item-box__active");
+          break;
+        case "challenge":
+          if(gameOption.classList.contains("game-menu-options-item-box__active")) {
+            COMP_CHALLENGE_ENABLED = false;
+          }
+          else {
+            COMP_CHALLENGE_ENABLED = true;
+          }
+          gameOption.classList.toggle("game-menu-options-item-box__active");
+          break;
+        case "score":
+          let userValue = parseInt(gameOption.children[0].value, 10);
+          if(isNaN(userValue)) {
+            return;
+          }
+          if(FINAL_SCORE !== userValue) {
+            if(userValue <= 0) {
+              FINAL_SCORE = 1;
+            }
+            else {
+              FINAL_SCORE = userValue;
+            }
+            GAME_IN_PROGRESS = false;
+            GAME_FINISH = false;
+            Game.init();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    ////ADVANCED GAME OPTIONS
+    if(gameOptionAdvancedItem) {
+      let gameOption = gameOptionAdvancedItem.children[1];
+      let gameOptionID = gameOptionAdvancedItem.children[1].id;
+      let userValue = parseInt(gameOption.children[0].value, 10);
+      gameOptionID = gameOptionID.split("-").splice(4).join("-");
+      if(isNaN(userValue)) {
+        return;
+      }
+      switch (gameOptionID) {
+        case "ball-speed-x":
+          if(BALL_SPEED_X !== userValue) {
+            BALL_SPEED_X = userValue;
+          }
+          break;
+        case "ball-speed-y":
+          if(BALL_SPEED_Y !== userValue) {
+            BALL_SPEED_Y = userValue;
+          }
+          break;
+        case "ball-decel":
+          if(BALL_DEACCELERATION !== userValue) {
+            BALL_DEACCELERATION = userValue;
+          }
+          break;
+        case "paddle-speed":
+          if(PADDLE_SPEED_Y !== userValue) {
+            PADDLE_SPEED_Y = userValue;
+          }
+          break;
+        case "comp-paddle-speed":
+          if(COMP_PADDLE_SPEED_Y !== userValue) {
+            COMP_PADDLE_SPEED_Y = userValue;
+          }
+          break;
+        case "comp-paddle-multi":
+          if(COMP_PADDLE_SPEED_Y_MULTIPLYER !== userValue) {
+            COMP_PADDLE_SPEED_Y_MULTIPLYER = userValue;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  });
+  ////HANDLE KEY EVENTS IN GAME MENU
+  gameMenu.addEventListener("keyup", function(e) {
+    let gameOptionItem = e.target.closest(".game-menu-options-item");
+    let gameOptionAdvancedItem = e.target.closest(".game-menu-advanced-options-item");
+    ////GAME OPTIONS
+    if(gameOptionItem) {
+      let gameOption = gameOptionItem.children[1];
+      let gameOptionID = gameOptionItem.children[1].id;
+      gameOptionID = gameOptionID.split("-").pop();
+      switch (gameOptionID) {
+        case "sound":
+          if(e.keyCode === 13 || e.keyCode === 32) {
+            if(gameOption.classList.contains("game-menu-options-item-box__active")) {
+              HAS_SOUND = false;
+            }
+            else {
+              HAS_SOUND = true;
+            }
+            gameOption.classList.toggle("game-menu-options-item-box__active");
+          }
+          break;
+        case "physics":
+          if(e.keyCode === 13 || e.keyCode === 32) {
+            if(gameOption.classList.contains("game-menu-options-item-box__active")) {
+              REALISTIC_PADDLE = false;
+            }
+            else {
+              REALISTIC_PADDLE = true;
+            }
+            gameOption.classList.toggle("game-menu-options-item-box__active");
+          }
+          break;
+        case "challenge":
+          if(e.keyCode === 13 || e.keyCode === 32) {
+            if(gameOption.classList.contains("game-menu-options-item-box__active")) {
+              COMP_CHALLENGE_ENABLED = false;
+            }
+            else {
+              COMP_CHALLENGE_ENABLED = true;
+            }
+            gameOption.classList.toggle("game-menu-options-item-box__active");
+          }
+          break;
+        case "score":
+          let userValue = parseInt(gameOption.children[0].value, 10);
+          if(isNaN(userValue)) {
+            return;
+          }
+          if(FINAL_SCORE !== userValue) {
+            if(userValue <= 0) {
+              FINAL_SCORE = 1;
+            }
+            else {
+              FINAL_SCORE = userValue;
+            }
+            GAME_IN_PROGRESS = false;
+            GAME_FINISH = false;
+            Game.init();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    ////ADVANCED GAME OPTIONS
+    if(gameOptionAdvancedItem) {
+      let gameOption = gameOptionAdvancedItem.children[1];
+      let gameOptionID = gameOptionAdvancedItem.children[1].id;
+      let userValue = parseInt(gameOption.children[0].value, 10);
+      gameOptionID = gameOptionID.split("-").splice(4).join("-");
+      if(isNaN(userValue)) {
+        return;
+      }
+      switch (gameOptionID) {
+        case "ball-speed-x":
+          if(BALL_SPEED_X !== userValue) {
+            BALL_SPEED_X = userValue;
+          }
+          break;
+        case "ball-speed-y":
+          if(BALL_SPEED_Y !== userValue) {
+            BALL_SPEED_Y = userValue;
+          }
+          break;
+        case "ball-decel":
+          if(BALL_DEACCELERATION !== userValue) {
+            BALL_DEACCELERATION = userValue;
+          }
+          break;
+        case "paddle-speed":
+          if(PADDLE_SPEED_Y !== userValue) {
+            PADDLE_SPEED_Y = userValue;
+          }
+          break;
+        case "comp-paddle-speed":
+          if(COMP_PADDLE_SPEED_Y !== userValue) {
+            COMP_PADDLE_SPEED_Y = userValue;
+          }
+          break;
+        case "comp-paddle-multi":
+          if(COMP_PADDLE_SPEED_Y_MULTIPLYER !== userValue) {
+            COMP_PADDLE_SPEED_Y_MULTIPLYER = userValue;
+          }
+          break;
+        default:
+          break;
       }
     }
   });
