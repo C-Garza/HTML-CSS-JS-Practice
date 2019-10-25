@@ -93,8 +93,6 @@ window.onload = function() {
       this.canvas = document.getElementById("game-board");
       this.context = this.canvas.getContext("2d");
 
-      // this.canvas.width = 600;
-      // this.canvas.height = 500;
       this.canvas.width = windowWidth;
       this.canvas.height = viewportHeight;
 
