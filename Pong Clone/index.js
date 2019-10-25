@@ -237,7 +237,6 @@ window.onload = function() {
       }
       if(this.ball.y >= this.canvas.height + 1) {
         this.ball.y = this.canvas.height - this.ball.height;
-        console.log("RAN");
       }
       ////HANDLE PLAYER ONE SCORE
       if(this.ball.x >= this.canvas.width) {
