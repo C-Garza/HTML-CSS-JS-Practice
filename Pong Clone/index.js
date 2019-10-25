@@ -20,10 +20,12 @@ window.onload = function() {
   let IS_COMP = false;
   let COMP_PADDLE_SPEED_Y = 5;
   let COMP_PADDLE_SPEED_Y_MULTIPLYER = 1.6;
+  let COMP_PADDLE_SPEED_Y_CHALLENGE = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
   let COMP_CHALLENGE = false;
   let COMP_CHALLENGE_ENABLED = true;
   let REALISTIC_PADDLE = false;
   let FINAL_SCORE = 5;
+  let GAME_ROUND_END = false;
   let GAME_IN_PROGRESS = false;
   let GAME_FINISH = false;
   let HAS_SOUND = true;
@@ -96,6 +98,8 @@ window.onload = function() {
       this.playerTwo = Paddle.init.call(this);
       this.ball = Ball.init.call(this);
 
+      COMP_CHALLENGE = false;
+
       ////IF GAME HAS BEGUN
       this.isRunning = false;
       ////CONTROL FPS (60FPS)
@@ -135,7 +139,6 @@ window.onload = function() {
     },
     ////RENDER MAIN AND SCORE MENU
     menu: function menu() {
-      // this.context.font = "2em Arial";
       this.context.font = "2em Lobster";
       this.context.textAlign = "center";
 
@@ -151,6 +154,16 @@ window.onload = function() {
 
       this.context.font = "1.5em Comfortaa";
       this.context.fillText(FINAL_SCORE, this.canvas.width / 2, this.canvas.height / 10);
+
+      if(GAME_ROUND_END && (FINAL_SCORE !== this.playerOne.score && FINAL_SCORE !== this.playerTwo.score)) {
+        this.nextTurn();
+      }
+    },
+    ////RENDER NEXT TURN RESET
+    nextTurn: function nextTurn() {
+      this.context.font = "2.5em Lobster";
+      this.context.textAlign = "center";
+      this.context.fillText("Ready?", this.canvas.width / 2, this.canvas.height / 2.5);
     },
     ////RENDER GAME OBJECTS
     render: function render(gameObject) {
@@ -172,7 +185,7 @@ window.onload = function() {
           this.ball.y_speed -= this.playerOne.y_speed;
         }
         else {
-          this.ball.y_speed -= (this.playerOne.y_speed / 2); //
+          this.ball.y_speed -= (this.playerOne.y_speed / 2);
         }
         if(HAS_SOUND) {
           pong_hit.play();
@@ -215,8 +228,12 @@ window.onload = function() {
       ////HANDLE PLAYER ONE SCORE
       if(this.ball.x >= this.canvas.width) {
         this.playerOne.score += 1;
-        this.ball = this.playerOne.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
-        this.ball.x_speed = BALL_SPEED_X >= 0 ? BALL_SPEED_X : -BALL_SPEED_X;
+        GAME_ROUND_END = true;
+        window.setTimeout(() => {
+          this.ball = this.playerOne.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
+          this.ball.x_speed = BALL_SPEED_X >= 0 ? BALL_SPEED_X : -BALL_SPEED_X;
+          GAME_ROUND_END = false;
+        }, 1000);
         if(HAS_SOUND) {
           pong_point.play();
         }
@@ -224,8 +241,12 @@ window.onload = function() {
       ////HANDLE PLAYER TWO SCORE
       if(this.ball.x <= 0) {
         this.playerTwo.score += 1;
-        this.ball = this.playerTwo.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
-        this.ball.x_speed = BALL_SPEED_X >= 0 ? -BALL_SPEED_X : BALL_SPEED_X;
+        GAME_ROUND_END = true;
+        window.setTimeout(() => {
+          this.ball = this.playerOne.score === FINAL_SCORE ? this.ball : Ball.init.call(this);
+          this.ball.x_speed = BALL_SPEED_X >= 0 ? -BALL_SPEED_X : BALL_SPEED_X;
+          GAME_ROUND_END = false;
+        }, 1000);
         if(HAS_SOUND) {
           pong_point.play();
         }
@@ -240,15 +261,25 @@ window.onload = function() {
       }
       ////COMPUTER AI MOVEMENT
       if(IS_COMP) {
-        if((this.playerTwo.y + this.playerTwo.height / 2) < (this.ball.y + this.ball.height / 2)) {
-          this.playerTwo.y += COMP_PADDLE_SPEED_Y;
-        }
-        if((this.playerTwo.y + this.playerTwo.height / 2) > (this.ball.y + this.ball.height / 2)) {
-          this.playerTwo.y -= COMP_PADDLE_SPEED_Y;
-        }
         if(FINAL_SCORE / 2 <= this.playerOne.score && !COMP_CHALLENGE && COMP_CHALLENGE_ENABLED) {
           COMP_CHALLENGE = true;
-          COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+          COMP_PADDLE_SPEED_Y_CHALLENGE = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+        }
+        if((this.playerTwo.y + this.playerTwo.height / 2) < (this.ball.y + this.ball.height / 2)) {
+          if(COMP_CHALLENGE && COMP_CHALLENGE_ENABLED) {
+            this.playerTwo.y += COMP_PADDLE_SPEED_Y_CHALLENGE;
+          }
+          else {
+            this.playerTwo.y += COMP_PADDLE_SPEED_Y;
+          }
+        }
+        if((this.playerTwo.y + this.playerTwo.height / 2) > (this.ball.y + this.ball.height / 2)) {
+          if(COMP_CHALLENGE && COMP_CHALLENGE_ENABLED) {
+            this.playerTwo.y -= COMP_PADDLE_SPEED_Y_CHALLENGE;
+          }
+          else {
+            this.playerTwo.y -= COMP_PADDLE_SPEED_Y;
+          }
         }
       }
       ////PLAYER ONE COLLISION WITH TOP WALL
@@ -266,6 +297,13 @@ window.onload = function() {
       ////PLAYER TWO COLLISION WITH BOTTOM WALL
       if(this.playerTwo.y + this.playerTwo.height >= this.canvas.height) {
         this.playerTwo.y = this.canvas.height - this.playerTwo.height;
+      }
+      ////RESET BALL WHEN POINT IS SCORED
+      if(GAME_ROUND_END && (FINAL_SCORE !== this.playerOne.score && FINAL_SCORE !== this.playerTwo.score)) {
+        this.ball.x = (this.canvas.width / 2) - 5;
+        this.ball.y = (this.canvas.height / 2) -5;
+        this.ball.x_speed = 0;
+        this.ball.y_speed = 0;
       }
     },
     ////RENDER WIN MENU
@@ -292,7 +330,6 @@ window.onload = function() {
         this.context.fillText("Press spacebar to play again!", this.canvas.width / 2, this.canvas.height / 1.5);
         if(COMP_CHALLENGE) {
           COMP_CHALLENGE = false;
-          COMP_PADDLE_SPEED_Y = COMP_PADDLE_SPEED_Y / COMP_PADDLE_SPEED_Y_MULTIPLYER;
         }
         Game.isRunning = false;
         GAME_IN_PROGRESS = false;
@@ -308,7 +345,7 @@ window.onload = function() {
   ////LISTEN FOR PLAYER CONTROLS
   window.addEventListener("keydown", function(e) {
     ////TOGGLE PAUSE MENU
-    if(e.keyCode === 80) {
+    if(e.keyCode === 80 || e.keyCode === 27) {
       gameMenu.classList.toggle("hidden");
       isMenuOpen = isMenuOpen ? false : true;
       if(GAME_IN_PROGRESS) {
@@ -455,7 +492,6 @@ window.onload = function() {
   });
   ////HANDLE CLICK EVENTS IN GAME MENU
   gameMenu.addEventListener("click", function(e) {
-    console.log(e.target);
     let gameOptionItem = e.target.closest(".game-menu-options-item");
     let gameOptionAdvancedItem = e.target.closest(".game-menu-advanced-options-item");
     let resetDefault = e.target.closest(".game-menu-reset-default");
@@ -544,15 +580,17 @@ window.onload = function() {
         case "ball-speed-x":
           if(BALL_SPEED_X !== userValue) {
             BALL_SPEED_X = userValue;
+            Game.ball.x_speed = BALL_SPEED_X;
           }
           break;
         case "ball-speed-y":
           if(BALL_SPEED_Y !== userValue) {
             BALL_SPEED_Y = userValue;
+            Game.ball.y_speed = BALL_SPEED_Y;
           }
           break;
         case "ball-decel":
-          if(BALL_DEACCELERATION !== userValue) {
+          if(BALL_DEACCELERATION !== userValue && userValue >= 0) {
             BALL_DEACCELERATION = userValue;
           }
           break;
@@ -564,11 +602,17 @@ window.onload = function() {
         case "comp-paddle-speed":
           if(COMP_PADDLE_SPEED_Y !== userValue) {
             COMP_PADDLE_SPEED_Y = userValue;
+            if(COMP_CHALLENGE) {
+              COMP_PADDLE_SPEED_Y_CHALLENGE = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+            }
           }
           break;
         case "comp-paddle-multi":
           if(COMP_PADDLE_SPEED_Y_MULTIPLYER !== userValue) {
             COMP_PADDLE_SPEED_Y_MULTIPLYER = userValue;
+            if(COMP_CHALLENGE) {
+              COMP_PADDLE_SPEED_Y_CHALLENGE = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+            }
           }
           break;
         default:
@@ -653,15 +697,17 @@ window.onload = function() {
         case "ball-speed-x":
           if(BALL_SPEED_X !== userValue) {
             BALL_SPEED_X = userValue;
+            Game.ball.x_speed = BALL_SPEED_X;
           }
           break;
         case "ball-speed-y":
           if(BALL_SPEED_Y !== userValue) {
             BALL_SPEED_Y = userValue;
+            Game.ball.y_speed = BALL_SPEED_Y;
           }
           break;
         case "ball-decel":
-          if(BALL_DEACCELERATION !== userValue) {
+          if(BALL_DEACCELERATION !== userValue && userValue >= 0) {
             BALL_DEACCELERATION = userValue;
           }
           break;
@@ -673,11 +719,17 @@ window.onload = function() {
         case "comp-paddle-speed":
           if(COMP_PADDLE_SPEED_Y !== userValue) {
             COMP_PADDLE_SPEED_Y = userValue;
+            if(COMP_CHALLENGE) {
+              COMP_PADDLE_SPEED_Y_CHALLENGE = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+            }
           }
           break;
         case "comp-paddle-multi":
           if(COMP_PADDLE_SPEED_Y_MULTIPLYER !== userValue) {
             COMP_PADDLE_SPEED_Y_MULTIPLYER = userValue;
+            if(COMP_CHALLENGE) {
+              COMP_PADDLE_SPEED_Y_CHALLENGE = COMP_PADDLE_SPEED_Y * COMP_PADDLE_SPEED_Y_MULTIPLYER;
+            }
           }
           break;
         default:

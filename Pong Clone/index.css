@@ -28,6 +28,10 @@ body {
 ::placeholder {
   color: white;
 }
+a {
+  text-decoration: none;
+  color: white;
+}
 /*****CANVAS*****/
 #canvas-wrap {
   position: relative;
@@ -63,6 +67,9 @@ body {
   cursor: default;
 }
 .game-menu-options-item:hover .game-menu-options-label {
+  color: #FF5252;
+}
+.game-menu-options-item:focus .game-menu-options-label {
   color: #FF5252;
 }
 .game-menu-options-item-box {
@@ -165,18 +172,44 @@ body {
   border-radius: 10px;
 }
 /*****DEFAULT AND CREDITS*****/
-.game-menu-reset {
-
-}
 .game-menu-reset h2 {
   display: inline-block;
   cursor: pointer;
+  margin-bottom: 0;
 }
 .game-menu-reset h2:hover {
   color: #FF5252;
 }
 .game-menu-reset h2:focus {
   color: #FF5252;
+}
+.game-menu-credits:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.game-menu-credits-person {
+  width: 50%;
+  float: left;
+}
+.game-menu-credits h2 {
+  margin-bottom: 10px;
+}
+.game-menu-credits a {
+  font-size: 1.2em;
+}
+.game-menu-credits a:hover {
+  color: #FF5252;
+}
+.game-menu-credits a:focus {
+  color: #FF5252;
+}
+.game-menu-credits-christian__icon {
+  display: inline-block;
+  margin-top: 5px;
+}
+.game-menu-credits-christian__icon i {
+  font-size: 2em;
 }
 .hidden {
   display: none;

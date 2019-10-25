@@ -3,6 +3,7 @@
   <title>Pong Clone</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css?family=Comfortaa|Lobster&display=swap" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="index.css">
   <script type="text/javascript" src="index.js"></script>
@@ -61,7 +62,7 @@
         <div class="game-menu-advanced-options-item">
           <label class="game-menu-advanced-options-label" for="game-menu-advanced-options-ball-decel">Ball Deceleration</label>
           <div id="game-menu-advanced-options-ball-decel" class="game-menu-advanced-options-item-box">
-            <input type="number" placeholder="1">
+            <input type="number" placeholder="1" min="1">
           </div>
         </div>
         <div class="game-menu-advanced-options-item">
@@ -73,6 +74,18 @@
       </div>
       <div class="game-menu-reset">
         <h2 class="game-menu-reset-default" tabindex="0">Reset to defaults</h2>
+      </div>
+      <div class="game-menu-credits">
+        <div class="game-menu-credits-person game-menu-credits-christian">
+          <h2>Made By</h2>
+          <a href="https://c-garza.github.io/" target="_blank" rel="noopener noreferrer">Christian Garza</a>
+          <br/>
+          <a href="https://github.com/C-Garza/HTML-CSS-JS-Practice/tree/master/Pong%20Clone" class="game-menu-credits-christian__icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-github-square"></i></a>
+        </div>
+        <div class="game-menu-credits-person game-menu-credits-sound">
+          <h2>Sounds By</h2>
+          <a href="https://opengameart.org/content/3-ping-pong-sounds-8-bit-style" target="_blank" rel="noopener noreferrer">captaincrunch80</a>
+        </div>
       </div>
     </div>
   </div>
