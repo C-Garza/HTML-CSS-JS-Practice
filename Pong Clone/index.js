@@ -4,6 +4,8 @@ window.onload = function() {
   window.mozRequestAnimationFrame ||
   function(callback) {window.setTimeout(callback, 1000/60)};
   let gameMenu = document.querySelector(".game-menu");
+  let viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  let windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   let keysDown = [];
   let playerOneKeysDown = [];
   let playerTwoKeysDown = [];
@@ -91,8 +93,10 @@ window.onload = function() {
       this.canvas = document.getElementById("game-board");
       this.context = this.canvas.getContext("2d");
 
-      this.canvas.width = 600;
-      this.canvas.height = 500;
+      // this.canvas.width = 600;
+      // this.canvas.height = 500;
+      this.canvas.width = windowWidth;
+      this.canvas.height = viewportHeight;
 
       this.playerOne = Paddle.init.call(this, "left");
       this.playerTwo = Paddle.init.call(this);
@@ -109,6 +113,8 @@ window.onload = function() {
     },
     ////DRAW NEW FRAME
     draw: function draw() {
+      this.context.save();
+			this.context.setTransform(1,0,0,1,0,0);
       this.context.clearRect(0 , 0, this.canvas.width, this.canvas.height);
 
       this.context.fillStyle = "black";
@@ -122,6 +128,7 @@ window.onload = function() {
       }
 
       this.menu();
+      this.context.restore();
     },
     ////GAME LOOP
     loop: function loop() {
@@ -148,11 +155,11 @@ window.onload = function() {
         this.context.font = "1.5em Lobster";
         this.context.fillText("Press P for Options", this.canvas.width / 2, this.canvas.height / 1.1);
       }
-      this.context.font = "2em Comfortaa";
+      this.context.font = "2.3em Comfortaa";
       this.context.fillText(this.playerOne.score, this.canvas.width / 3.5, this.canvas.height / 5);
       this.context.fillText(this.playerTwo.score, this.canvas.width / 1.4, this.canvas.height / 5);
 
-      this.context.font = "1.5em Comfortaa";
+      this.context.font = "1.8em Comfortaa";
       this.context.fillText(FINAL_SCORE, this.canvas.width / 2, this.canvas.height / 10);
 
       if(GAME_ROUND_END && (FINAL_SCORE !== this.playerOne.score && FINAL_SCORE !== this.playerTwo.score)) {
@@ -224,6 +231,13 @@ window.onload = function() {
         if(HAS_SOUND) {
           pong_plop.play();
         }
+      }
+      if(this.ball.y <= -1) {
+        this.ball.y = 0 + this.ball.height;
+      }
+      if(this.ball.y >= this.canvas.height + 1) {
+        this.ball.y = this.canvas.height - this.ball.height;
+        console.log("RAN");
       }
       ////HANDLE PLAYER ONE SCORE
       if(this.ball.x >= this.canvas.width) {
@@ -735,6 +749,20 @@ window.onload = function() {
         default:
           break;
       }
+    }
+  });
+  window.addEventListener("resize", function(e) {
+    viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    Game.canvas.width = windowWidth;
+    Game.canvas.height = viewportHeight;
+    Game.playerOne.x = 75;
+    Game.playerTwo.x = Game.canvas.width - 75;
+    if(!Game.isRunning) {
+      Game.playerOne.y = (Game.canvas.height / 2) - 40;
+      Game.playerTwo.y = (Game.canvas.height / 2) - 40;
+      Game.ball = Ball.init.call(Game);
+      Game.draw();
     }
   });
 };
