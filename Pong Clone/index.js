@@ -232,9 +232,11 @@ window.onload = function() {
           pong_plop.play();
         }
       }
+      ////IF BALL GOES ABOVE CANVAS HEIGHT
       if(this.ball.y <= -1) {
         this.ball.y = 0 + this.ball.height;
       }
+      ////IF BALL GOES BELOW CANVAS HEIGHT
       if(this.ball.y >= this.canvas.height + 1) {
         this.ball.y = this.canvas.height - this.ball.height;
       }
@@ -750,6 +752,7 @@ window.onload = function() {
       }
     }
   });
+  ////RESIZE CANVAS IF VIEW CHANGES
   window.addEventListener("resize", function(e) {
     viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
     windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
