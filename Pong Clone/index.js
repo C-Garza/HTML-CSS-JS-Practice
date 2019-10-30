@@ -354,6 +354,7 @@ window.onload = function() {
   ////INSTANTIATE GAME AND START
   Game.init();
   Game.draw();
+  document.querySelector("body").removeChild(document.getElementById("font-preload"));
 
   ////LISTEN FOR PLAYER CONTROLS
   window.addEventListener("keydown", function(e) {

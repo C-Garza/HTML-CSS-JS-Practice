@@ -32,6 +32,14 @@ a {
   text-decoration: none;
   color: white;
 }
+#font-preload {
+  font-family: "Lobster";
+  width: 0px;
+  height: 0px;
+}
+#font-preload > span:last-child {
+  font-family: "Comfortaa";
+}
 /*****CANVAS*****/
 #canvas-wrap {
   position: relative;
