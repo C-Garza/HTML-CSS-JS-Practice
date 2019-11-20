@@ -328,12 +328,13 @@ window.onload = function() {
       }
       let whoWon = null;
       if(this.playerOne.score === FINAL_SCORE) {
-        whoWon = "ONE";
+        whoWon = "One";
       }
       if(this.playerTwo.score === FINAL_SCORE) {
         whoWon = "Two";
       }
       if(whoWon) {
+        this.context.fillStyle = "white";
         this.context.font = "2.5em Lobster";
         this.context.textAlign = "center";
         this.context.fillText("Player " + whoWon + " Wins!", this.canvas.width / 2, this.canvas.height / 2);
